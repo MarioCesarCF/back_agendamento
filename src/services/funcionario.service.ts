@@ -1,11 +1,12 @@
 import FuncionarioRepository from "../repositories/funcionario.repository";
+import bcrypt from "bcryptjs";
 
 const funcionarioRepository = new FuncionarioRepository();
 
 class FuncionarioService {
     create = async (body: any) => {
         const { name, email, password, role } = body;
-    console.log(body);
+
         if (!name || !email || !password || !role)
           throw new Error("Preencha todos os campos obrigatórios ao registro.");    
     
@@ -48,6 +49,54 @@ class FuncionarioService {
     
         return pageData;
       };  
+
+      findById = async (funcionarioId: string) => {
+        const funcionario = await funcionarioRepository.findById(funcionarioId);
+    
+        if (!funcionario)
+            throw new Error("O ID informado não corresponde a um funcionário cadastrado.");
+
+        return funcionario;
+      };
+    
+      update = async (body: any, funcionarioId: string) => {
+        let { name, email, password, role } = body;
+    
+        if (!name && !email && !password && !role)
+          throw new Error("Envie um ou mais campos para atualização.");
+    
+        const funcionario = await funcionarioRepository.findById(funcionarioId);
+    
+        if (!funcionario)
+            throw new Error("O ID informado não corresponde a um funcionário cadastrado.");
+    
+        if (password) {
+        //   const regex =
+        //     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*=+?<>])[0-9a-zA-Z!@#$%&*=+?<>]{8,}$/g;
+    
+        //   if (!password.match(regex))
+        //     throw new Error(
+        //       "Use uma senha forte, com: pelo menos 8 caracteres, 1 letra minúscula, 1 letra maiúscula, 1 número e um caractere especial (!@#$%&*<>:;?+=)"
+        //     );
+    
+          body.password = await bcrypt.hash(password, 10);
+        }
+        
+        await funcionarioRepository.update(funcionarioId, body);
+    
+        return { message: "Funcionário atualizado com sucesso!" };
+      };
+    
+      delete = async (funcionarioId: string) => {
+        const funcionario = funcionarioRepository.findById(funcionarioId);
+        
+        if (!funcionario)
+            throw new Error("O ID informado não corresponde a um funcionário cadastrado.");
+
+        await funcionarioRepository.delete(funcionarioId);
+    
+        return { message: "Funcionário deletado com sucesso!" };
+      };
 }
 
 export default FuncionarioService;
