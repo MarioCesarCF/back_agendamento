@@ -1,13 +1,13 @@
-import FuncionarioService from "../services/funcionario.service";
+import AgendaService from "../services/agenda.service";
 
-const funcionarioService = new FuncionarioService();
+const agendaService = new AgendaService();
 
-class FuncionarioController {
+class AgendaController {
   create = async (req: any, res: any) => {
     const body = req.body;
-    
+
     try {
-      const response = await funcionarioService.create(body);
+      const response = await agendaService.create(body);
 
       return res.status(201).send(response);
     } catch (err: any) {
@@ -17,7 +17,7 @@ class FuncionarioController {
 
   getAll = async (req: any, res: any) => {
     try {
-      const response = await funcionarioService.findAll();
+      const response = await agendaService.findAll();
 
       return res.send(response);
     } catch (err: any) {
@@ -26,10 +26,10 @@ class FuncionarioController {
   };
 
   findById = async (req: any, res: any) => {
-    const { id: funcionarioId } = req.params;
+    const { id: agendaId } = req.params;
     
     try {
-      const response = await funcionarioService.findById(funcionarioId);
+      const response = await agendaService.findById(agendaId);
 
       return res.send(response);
     } catch (err: any) {
@@ -39,10 +39,10 @@ class FuncionarioController {
 
   update = async (req: any, res: any) => {
     const body = req.body;
-    const { id: funcionarioId } = req.params;
+    const { id: agendaId } = req.params;
     
     try {
-      const response = await funcionarioService.update(body, funcionarioId);
+      const response = await agendaService.update(body, agendaId);
 
       return res.send(response);
     } catch (err: any) {
@@ -51,10 +51,10 @@ class FuncionarioController {
   };
 
   delete = async (req: any, res: any) => {
-    const { id: funcionarioId } = req.params;
+    const { id: agendaId } = req.params;
 
     try {
-      const response = await funcionarioService.delete(funcionarioId);
+      const response = await agendaService.delete(agendaId);
 
       return res.send(response);
     } catch (err: any) {
@@ -63,4 +63,4 @@ class FuncionarioController {
   };
 }
 
-export default FuncionarioController;
+export default AgendaController;

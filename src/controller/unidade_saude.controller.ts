@@ -1,13 +1,13 @@
-import FuncionarioService from "../services/funcionario.service";
+import UnidadeSaudeService from "../services/unidade_saude.service";
 
-const funcionarioService = new FuncionarioService();
+const unidadeSaudeService = new UnidadeSaudeService();
 
-class FuncionarioController {
+class UnidadeSaudeController {
   create = async (req: any, res: any) => {
     const body = req.body;
     
     try {
-      const response = await funcionarioService.create(body);
+      const response = await unidadeSaudeService.create(body);
 
       return res.status(201).send(response);
     } catch (err: any) {
@@ -17,7 +17,7 @@ class FuncionarioController {
 
   getAll = async (req: any, res: any) => {
     try {
-      const response = await funcionarioService.findAll();
+      const response = await unidadeSaudeService.findAll();
 
       return res.send(response);
     } catch (err: any) {
@@ -26,10 +26,10 @@ class FuncionarioController {
   };
 
   findById = async (req: any, res: any) => {
-    const { id: funcionarioId } = req.params;
+    const { id: unidadeSaudeId } = req.params;
     
     try {
-      const response = await funcionarioService.findById(funcionarioId);
+      const response = await unidadeSaudeService.findById(unidadeSaudeId);
 
       return res.send(response);
     } catch (err: any) {
@@ -39,10 +39,10 @@ class FuncionarioController {
 
   update = async (req: any, res: any) => {
     const body = req.body;
-    const { id: funcionarioId } = req.params;
+    const { id: unidadeSaudeId } = req.params;
     
     try {
-      const response = await funcionarioService.update(body, funcionarioId);
+      const response = await unidadeSaudeService.update(body, unidadeSaudeId);
 
       return res.send(response);
     } catch (err: any) {
@@ -51,10 +51,10 @@ class FuncionarioController {
   };
 
   delete = async (req: any, res: any) => {
-    const { id: funcionarioId } = req.params;
+    const { id: unidadeSaudeId } = req.params;
 
     try {
-      const response = await funcionarioService.delete(funcionarioId);
+      const response = await unidadeSaudeService.delete(unidadeSaudeId);
 
       return res.send(response);
     } catch (err: any) {
@@ -63,4 +63,4 @@ class FuncionarioController {
   };
 }
 
-export default FuncionarioController;
+export default UnidadeSaudeController;

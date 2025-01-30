@@ -21,6 +21,10 @@ const FuncionarioSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  realiza_consulta: {
+    type: Boolean,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
