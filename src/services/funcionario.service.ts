@@ -1,5 +1,5 @@
-import FuncionarioRepository from "../repositories/funcionario.repository";
 import bcrypt from "bcryptjs";
+import FuncionarioRepository from "../repositories/funcionario.repository";
 
 const funcionarioRepository = new FuncionarioRepository();
 
@@ -23,7 +23,7 @@ class FuncionarioService {
     
         return {
           message: "Funcionário criado com sucesso.",
-          user: {
+          funcionario: {
             id: funcionario._id,
             name,
             email,

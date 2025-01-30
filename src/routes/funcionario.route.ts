@@ -5,10 +5,10 @@ const route = Router();
 
 const funcionarioController = new FuncionarioController();
 
-route.get("/", funcionarioController.findAll);
-route.post("/", funcionarioController.create);
-route.get("/:id", funcionarioController.findById);
-route.patch("/:id", funcionarioController.update);
-route.delete("/:id", funcionarioController.delete);
+route.get("/", funcionarioController.obterTodos);
+route.post("/", funcionarioController.criar);
+route.get("/:id", funcionarioController.obterPorId);
+route.patch("/:id", funcionarioController.atualizar);
+route.delete("/:id", funcionarioController.deletar);
 
 export default route;

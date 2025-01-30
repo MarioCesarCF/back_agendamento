@@ -1,7 +1,7 @@
+import cors from "cors";
 import "dotenv/config";
 import express from "express";
 import connection from "./config/dbConfig";
-import cors from "cors";
 import { router } from "./routes/index";
 
 const app = express();
@@ -10,7 +10,11 @@ connection();
 app.use(express.json());
 app.use(router);
 
-const PORT = process.env.PORT || 27017;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+router.get("/", (req, res) => {
+  res.send("API com TypeScript e Express!");
 });
