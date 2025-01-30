@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const AgendaSchema = new mongoose.Schema({
   unidade_saude: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: {},
     ref: "UnidadeSaude",
     required: true,
   },
   funcionario: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: {},
     ref: "Funcionario",
     required: true,
   },
@@ -19,7 +19,7 @@ const AgendaSchema = new mongoose.Schema({
     type: [],
     required: true,
   },
-  situacao: {
+  disponivel: {
     type: Boolean,
     required: true,
   },

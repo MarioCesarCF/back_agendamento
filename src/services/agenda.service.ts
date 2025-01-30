@@ -1,15 +1,22 @@
 import AgendaRepository from "../repositories/agenda.repository";
+import UnidadeSaudeService from "./unidade_saude.service";
 
 const agendaRepository = new AgendaRepository();
+const unidadeSaudeService = new UnidadeSaudeService();
 
 class AgendaService {
   create = async (body: any) => {
-    const { unidade_saude, funcionario, data_dia, horarios } = body; 
+    const { unidade_saude, funcionario, data_dia, horarios } = body;
 
     if (!unidade_saude || !funcionario || !data_dia || !horarios)
       throw new Error("Preencha todos os campos obrigatórios ao registro.");
 
-    // Adicionar lógica para garantir que somente serão aceitos funcionários que estejam cadastrados na unidade_saude
+    if(unidade_saude && funcionario) {
+      const unidadeSaudeEncontrada = await unidadeSaudeService.findById(unidade_saude.id);
+      if(!unidadeSaudeEncontrada.funcionarios.includes(funcionario.id)) {
+        throw new Error("O funcionário não pertence à unidade de saúde.");
+      }
+    };
 
     body.situacao = true;
 
@@ -42,7 +49,7 @@ class AgendaService {
         funcionario: item.funcionario,
         data_dia: item.data_dia,
         horarios: item.horarios,
-        situacao: item.situacao
+        disponivel: item.disponivel
       })),
     };
 
@@ -59,15 +66,31 @@ class AgendaService {
   };
 
   update = async (body: any, agendaId: string) => {
-    let { unidade_saude, funcionario, data_dia, horarios, situacao } = body;
+    let { unidade_saude, funcionario, data_dia, horarios, disponivel } = body;
 
-    if (!unidade_saude && !funcionario && !data_dia && !horarios && !situacao)
+    if (!unidade_saude && !funcionario && !data_dia && !horarios && !disponivel)
       throw new Error("Envie um ou mais campos para atualização.");
 
     const agenda = await agendaRepository.findById(agendaId);
 
     if (!agenda)
       throw new Error("O ID informado não corresponde a uma agenda cadastrada.");
+
+    if (body.horarios) {
+
+      // Colocar verificação se o CNS é válido
+
+      const novosDadosHorario = {
+        nome_paciente: body.horarios.nome_paciente,
+        cns_paciente: body.horarios.cns_paciente,
+        telefone_paciente: body.horarios.telefone_paciente,
+        status: body.horarios.status
+      }
+
+      const index = agenda.horarios.findIndex(item => item.horario === body.horarios.horario);
+      agenda.horarios[index] = { ...agenda.horarios[index], ...novosDadosHorario };
+      body.horarios = agenda.horarios;
+    }
 
     await agendaRepository.update(agendaId, body);
 
