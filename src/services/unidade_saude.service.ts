@@ -1,6 +1,8 @@
 import UnidadeSaudeRepository from "../repositories/unidade_saude.repository";
+import FuncionarioService from "./funcionario.service";
 
 const unidadeSaudeRepository = new UnidadeSaudeRepository();
+const funcinarioService = new FuncionarioService();
 
 class UnidadeSaudeService {
   create = async (body: any) => {
@@ -8,6 +10,23 @@ class UnidadeSaudeService {
     
     if (!name || !funcionarios)
       throw new Error("Preencha todos os campos obrigatórios ao registro.");
+
+    if (funcionarios) {
+      const funcionariosCadastrados: any[] = [];
+
+      const arrayFuncionarios = await funcinarioService.findAll();
+
+      arrayFuncionarios.results.forEach((element: any) => {
+        const idString: string = element.id.valueOf();
+        funcionariosCadastrados.push(idString);
+      });
+
+      funcionarios.forEach((element: string) => {
+        if (!funcionariosCadastrados.includes(element)) {
+          throw new Error("Funcionário informado não cadastrado.");
+        }
+      })
+    }
 
     const unidadeSaude = await unidadeSaudeRepository.create(body);
 
