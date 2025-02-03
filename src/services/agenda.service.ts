@@ -77,8 +77,11 @@ class AgendaService {
       throw new Error("O ID informado não corresponde a uma agenda cadastrada.");
 
     if (body.horarios) {
+      const cns_paciente = body.horarios.cns_paciente;
 
-      // Colocar verificação se o CNS é válido
+      if (!this.verificarCns(cns_paciente)) {
+        throw new Error("Cartão Nacional do SUS inválido.");
+      };
 
       const novosDadosHorario = {
         nome_paciente: body.horarios.nome_paciente,
@@ -107,6 +110,18 @@ class AgendaService {
 
     return { message: "Agenda deletada com sucesso!" };
   };
+
+  verificarCns(cns: string): boolean {
+    if (!/^\d{15}$/.test(cns)) {
+      return false;
+    }
+
+    let soma = 0;
+    for (let i = 0; i < 15; i++) {
+      soma += parseInt(cns[i]) * (15 - i);
+    }
+    return soma % 11 === 0;
+  }
 }
 
 export default AgendaService;
